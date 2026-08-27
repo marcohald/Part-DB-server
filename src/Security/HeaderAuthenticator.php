@@ -77,6 +77,8 @@ class HeaderAuthenticator extends AbstractAuthenticator
                 $userRepository = $this->entityManager->getRepository(User::class);
                 $user = $userRepository->findOneBy(['name' => $userIdentifier]);
 
+                $needsFlush = false;
+
                 if (!$user) {
                     if (!$this->autoCreate) {
                         throw new UserNotFoundException(sprintf('User "%s" not found.', $userIdentifier));
@@ -90,16 +92,21 @@ class HeaderAuthenticator extends AbstractAuthenticator
                         $user->setNeedPwChange(false);
                     }
 
-                    if ('' !== $this->defaultGroup) {
-                        $groupRepository = $this->entityManager->getRepository(Group::class);
-                        $group = $groupRepository->findOneBy(['name' => $this->defaultGroup]);
-
-                        if ($group) {
-                            $user->setGroup($group);
-                        }
-                    }
-
                     $this->entityManager->persist($user);
+                    $needsFlush = true;
+                }
+
+                if (null === $user->getGroup() && '' !== $this->defaultGroup) {
+                    $groupRepository = $this->entityManager->getRepository(Group::class);
+                    $group = $groupRepository->findOneBy(['name' => $this->defaultGroup]);
+
+                    if ($group) {
+                        $user->setGroup($group);
+                        $needsFlush = true;
+                    }
+                }
+
+                if ($needsFlush) {
                     $this->entityManager->flush();
                 }
 
