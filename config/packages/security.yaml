@@ -25,6 +25,7 @@ security:
             switch_user: { role: CAN_SWITCH_USER }
 
             custom_authenticators:
+                - App\Security\HeaderAuthenticator
                 - App\Security\ApiTokenAuthenticator
                 - App\Security\OAuth\OAuthBearerAuthenticator
 
