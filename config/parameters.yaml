@@ -44,6 +44,15 @@ parameters:
   partdb.saml.enabled: '%env(bool:SAML_ENABLED)%'              # If this is set to true, SAML authentication is enabled
 
   ######################################################################################################################
+  # Trusted Header Authentication
+  ######################################################################################################################
+  partdb.header_auth.enabled: '%env(bool:HEADER_AUTH_ENABLED)%'
+  partdb.header_auth.header_name: '%env(string:HEADER_AUTH_HEADER_NAME)%'
+  partdb.header_auth.auto_create: '%env(bool:HEADER_AUTH_AUTO_CREATE)%'
+  partdb.header_auth.disable_password_expiration: '%env(bool:HEADER_AUTH_DISABLE_PASSWORD_EXPIRATION)%'
+  partdb.header_auth.default_group: '%env(string:HEADER_AUTH_DEFAULT_GROUP)%'
+
+  ######################################################################################################################
   # OAuth2 authorization server (API/MCP client auto-provisioning)
   ######################################################################################################################
   partdb.oauth_server.enabled: '%env(bool:OAUTH_SERVER_ENABLED)%'     # If set to true, enables the OAuth2 authorization server (/oauth/authorize, /oauth/token, admin client overview, OAuth2 bearer token auth)
@@ -100,6 +109,12 @@ parameters:
 
   env(OAUTH_SERVER_ENABLED): 0
   env(OAUTH_DCR_ENABLED): 0
+
+  env(HEADER_AUTH_ENABLED): 0
+  env(HEADER_AUTH_HEADER_NAME): 'REMOTE_USER'
+  env(HEADER_AUTH_AUTO_CREATE): 1
+  env(HEADER_AUTH_DISABLE_PASSWORD_EXPIRATION): 1
+  env(HEADER_AUTH_DEFAULT_GROUP): ''
 
 
   env(EMAIL_SENDER_EMAIL): 'noreply@partdb.changeme'
